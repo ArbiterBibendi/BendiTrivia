@@ -14,7 +14,7 @@ export async function GET(request: NextRequest, { params }: { params: { category
     
     
     if (trivia.rows.length <= 0) {
-        return NextResponse.json({"message": "No question found with that id"});
+        return NextResponse.json({"message": "No question found with those parameters"});
     }
     return NextResponse.json({"message": trivia.rows});
 }
