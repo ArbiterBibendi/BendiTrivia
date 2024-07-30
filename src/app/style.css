@@ -1,4 +1,4 @@
-html, body {
+html {
     height: 100%;
 }
 body {
@@ -9,10 +9,8 @@ body {
 .cardHolder {
     display: flex;
     justify-content: center;
-    height: 100%;
 }
 .card {
-
     background-color: bisque;
     color: black;
     border: 2px black;
