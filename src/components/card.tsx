@@ -5,6 +5,7 @@ export type Trivia = {
   question: string;
   answer: string;
   category: string;
+  id: string;
 };
 function handleClick(e: React.MouseEvent<HTMLElement>) {
   document.querySelector(".answer")?.setAttribute("style", "filter: none");
