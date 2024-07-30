@@ -7,8 +7,7 @@ export type Trivia = {
   category: string;
 };
 function handleClick(e: React.MouseEvent<HTMLElement>) {
-  const card: HTMLElement = e.target as HTMLElement;
-  card.querySelector(".answer")?.setAttribute("style", "filter: none");
+  document.querySelector(".answer")?.setAttribute("style", "filter: none");
 }
 export function Card({ trivia }: { trivia: Trivia }) {
   const { question, answer, category } = trivia;
