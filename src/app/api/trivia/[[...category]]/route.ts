@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { category: string } },
+  { params }: { params: { category: string } }
 ) {
-  const category = params.category ? params.category[0] : null;
+  const category: string | null = params.category ? params.category[0] : null;
   let trivia: QueryResult;
   if (category == null || category.toLowerCase() == "all") {
     trivia =

@@ -13,6 +13,7 @@ async function getTrivia(): Promise<Trivia> {
   const trivia: Trivia = responseJson.message;
   return trivia;
 }
+
 export default async function Home() {
   const trivia2 = await getTrivia();
   return (
