@@ -1,0 +1,26 @@
+html, body {
+    height: 100%;
+}
+body {
+    background: linear-gradient(black, rgb(31, 31, 53));
+    background-repeat: no-repeat;
+    color: bisque;
+}
+.cardHolder {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+.card {
+
+    background-color: bisque;
+    color: black;
+    border: 2px black;
+    border-radius: 1em;
+    padding: 1em;
+    aspect-ratio: 5 / 9;
+    max-height: 600px;
+}
+.answer {
+    filter: blur(10px)
+}
