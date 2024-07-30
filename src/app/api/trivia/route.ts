@@ -8,7 +8,8 @@ export async function GET(
   const searchParams = request.nextUrl.searchParams;
   const category: string | null = searchParams.get("category");
   const id: string | null = searchParams.get("id");
-  
+
+  // only use category if no id is specified
   let trivia: QueryResult;
   if (id != null) {
     trivia =
