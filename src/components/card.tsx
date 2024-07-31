@@ -1,5 +1,4 @@
 "use client";
-import { EventHandler, MouseEventHandler } from "react";
 
 export type Trivia = {
   question: string;
@@ -7,16 +6,22 @@ export type Trivia = {
   category: string;
   id: string;
 };
-function handleClick(e: React.MouseEvent<HTMLElement>) {
+function revealAnswer(e: React.MouseEvent<HTMLElement>) {
   document.querySelector(".answer")?.setAttribute("style", "filter: none");
 }
+function getNewTrivia(currentID: string) {
+  window.history.replaceState(null, "", `/?id=${currentID}`);
+  window.location.href = "/";
+}
 export function Card({ trivia }: { trivia: Trivia }) {
-  const { question, answer, category } = trivia;
+  const { question, answer, category, id }: Trivia = trivia;
   return (
-    <div className="card" onClick={handleClick}>
+    <div className="card" onClick={revealAnswer}>
       <h3 className="category">{category}</h3>
       <h2>{question}</h2>
       <h2 className="answer">{answer}</h2>
+      <button onClick={() => getNewTrivia(id)}>next</button>
     </div>
   );
 }
+// still need to track category
