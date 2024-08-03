@@ -17,7 +17,11 @@ function getNewTrivia(category: string) {
 export function Card({ trivia }: { trivia: Trivia }) {
   const { question, answer, category, id, requestedCategory }: Trivia = trivia;
   useEffect(() => {
-    window.history.replaceState(null, "", `/?category=${requestedCategory}&id=${id}`);
+    window.history.replaceState(
+      null,
+      "",
+      `/?category=${requestedCategory}&id=${id}`
+    );
   }, []);
 
   return (
