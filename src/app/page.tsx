@@ -21,6 +21,7 @@ async function getTrivia(id?: string, category?: string): Promise<Trivia> {
   );
 
   if (!response.ok) {
+    console.log(response);
     throw new Error("Something went wrong fetching trivia");
   }
   const responseJson = await response.json();

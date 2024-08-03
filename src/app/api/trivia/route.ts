@@ -1,6 +1,9 @@
 import { QueryResult, sql } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
+const errorTrivia = {
+  question: "No question found with those parameters", answer: "", id: "-1"
+}
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const qCategory: string | undefined | null = searchParams
@@ -24,7 +27,7 @@ export async function GET(request: NextRequest) {
 
   if (trivia.rows.length <= 0) {
     return NextResponse.json({
-      message: "No question found with those parameters",
+      message: {...errorTrivia, requestedCategory},
     });
   }
   return NextResponse.json({
