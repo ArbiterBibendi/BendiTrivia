@@ -12,6 +12,8 @@ body {
   justify-content: center;
 }
 .card {
+  display: flex;
+  flex-direction: column;
   background-color: bisque;
   color: black;
   border: 2px black;
@@ -32,4 +34,14 @@ body {
 }
 .category {
   color: rgba(90, 90, 90, 0.438);
+}
+#nextButton {
+  margin-top:auto;
+  margin-left: auto;
+  background: none;
+  border: none;
+  width: 25%;
+}
+#nextButton:hover {
+  filter:brightness(0.75)
 }

@@ -26,10 +26,15 @@ export function Card({ trivia }: { trivia: Trivia }) {
 
   return (
     <div className="card" onClick={revealAnswer}>
-      <h3 className="category">{category}</h3>
-      <h2>{question}</h2>
-      <h2 className="answer">{answer}</h2>
-      <button onClick={() => getNewTrivia(requestedCategory)}>next</button>
+      <div className="cardContents">
+        <h3 className="category">{category}</h3>
+        <h2>{question}</h2>
+        <h2 className="answer">{answer}</h2>
+      </div>
+
+      <button id="nextButton" onClick={() => getNewTrivia(requestedCategory)}>
+        <img src="/next.svg" />
+      </button>
     </div>
   );
 }
