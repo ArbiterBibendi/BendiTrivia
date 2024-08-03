@@ -10,7 +10,7 @@ export type Trivia = {
 function revealAnswer(e: React.MouseEvent<HTMLElement>) {
   document.querySelector(".answer")?.setAttribute("style", "filter: none");
 }
-function getNewTrivia(currentID: string) {
+function getNewTrivia() {
   window.location.href = "/";
 }
 export function Card({ trivia }: { trivia: Trivia }) {
@@ -24,7 +24,7 @@ export function Card({ trivia }: { trivia: Trivia }) {
       <h3 className="category">{category}</h3>
       <h2>{question}</h2>
       <h2 className="answer">{answer}</h2>
-      <button onClick={() => getNewTrivia(id)}>next</button>
+      <button onClick={() => getNewTrivia()}>next</button>
     </div>
   );
 }
