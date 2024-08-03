@@ -1,27 +1,25 @@
 import { QueryResult, sql } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { category: string } }
-) {
+export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const categoryParam: string | undefined | null = searchParams.get("category")?.toLowerCase();
-  const category = categoryParam ? categoryParam : "all";
-  
-  const id: string | null = searchParams.get("id");
+  const qCategory: string | undefined | null = searchParams
+    .get("category")
+    ?.toLowerCase();
+  const requestedCategory = qCategory ? qCategory : "all";
+  const qId: string | null = searchParams.get("id");
 
   // only use category if no id is specified
   let trivia: QueryResult;
-  if (id != null) {
+  if (qId != null) {
     trivia =
-      await sql`SELECT id, question, answer, category FROM trivia WHERE id=${Number(id)}`;
-  } else if (category == "all") {
+      await sql`SELECT id, question, answer, category FROM trivia WHERE id=${Number(qId)}`;
+  } else if (requestedCategory == "all") {
     trivia =
       await sql`SELECT id, question, answer, category FROM trivia OFFSET floor(random() * (SELECT COUNT(*) FROM trivia)) LIMIT 1;`;
   } else {
     trivia =
-      await sql`SELECT id, question, answer, category FROM trivia WHERE category ILIKE ${category} OFFSET floor(random() * (SELECT COUNT(*) FROM trivia WHERE category ILIKE ${category})) LIMIT 1;`;
+      await sql`SELECT id, question, answer, category FROM trivia WHERE category ILIKE ${requestedCategory} OFFSET floor(random() * (SELECT COUNT(*) FROM trivia WHERE category ILIKE ${requestedCategory})) LIMIT 1;`;
   }
 
   if (trivia.rows.length <= 0) {
@@ -29,6 +27,8 @@ export async function GET(
       message: "No question found with those parameters",
     });
   }
-  return NextResponse.json({ message: trivia.rows[0]});
+  return NextResponse.json({
+    message: { ...trivia.rows[0], requestedCategory },
+  });
 }
 export const revalidate = 0;
