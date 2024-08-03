@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 
 export type Trivia = {
   question: string;
@@ -10,11 +11,14 @@ function revealAnswer(e: React.MouseEvent<HTMLElement>) {
   document.querySelector(".answer")?.setAttribute("style", "filter: none");
 }
 function getNewTrivia(currentID: string) {
-  window.history.replaceState(null, "", `/?id=${currentID}`);
   window.location.href = "/";
 }
 export function Card({ trivia }: { trivia: Trivia }) {
   const { question, answer, category, id }: Trivia = trivia;
+  useEffect(() => {
+    window.history.replaceState(null, "", `/?id=${id}`);
+  }, []);
+
   return (
     <div className="card" onClick={revealAnswer}>
       <h3 className="category">{category}</h3>
