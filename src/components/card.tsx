@@ -1,4 +1,5 @@
 "use client";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export type Trivia = {
@@ -11,16 +12,18 @@ export type Trivia = {
 function revealAnswer(e: React.MouseEvent<HTMLElement>) {
   document.querySelector(".answer")?.setAttribute("style", "filter: none");
 }
-function getNewTrivia(category: string) {
-  window.location.href = "/?category=" + category;
+function getNewTrivia(category: string, pathName: string) {
+  window.location.href = `${pathName}?category=` + category;
 }
 export function Card({ trivia }: { trivia: Trivia }) {
   const { question, answer, category, id, requestedCategory }: Trivia = trivia;
+  const pathName = usePathname();
+
   useEffect(() => {
     window.history.replaceState(
       null,
       "",
-      `/?category=${requestedCategory}&id=${id}`
+      `${pathName}?category=${requestedCategory}&id=${id}`
     );
   }, []);
 
@@ -32,10 +35,12 @@ export function Card({ trivia }: { trivia: Trivia }) {
         <h2 className="answer">{answer}</h2>
       </div>
 
-      <button id="nextButton" onClick={() => getNewTrivia(requestedCategory)}>
+      <button
+        id="nextButton"
+        onClick={() => getNewTrivia(requestedCategory, pathName)}
+      >
         <img src="/next.svg" />
       </button>
     </div>
   );
 }
-// still need to track category
