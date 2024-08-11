@@ -7,6 +7,21 @@ body {
   background-repeat: no-repeat;
   color: bisque;
 }
+#homepageCategoryHolder {
+  max-width: 50%;
+  max-height: 200px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.homepageCategoryLink {
+  background-color: bisque;
+  color: black;
+  margin: 15px;
+  display: block;
+  padding: 20px;
+  font-size: xx-large;
+  border-radius: 20px;
+}
 .cardHolder {
   display: flex;
   justify-content: center;

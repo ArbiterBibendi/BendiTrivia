@@ -7,16 +7,21 @@ export default async function Home() {
   return (
     <>
       <h1>BendiTrivia</h1>
-      {categories.map((value, index) => {
-        return (
-          <>
-            <Link href={`/play?category=${value}`} key={index}>
-              {value}
-            </Link>
-            <br></br>
-          </>
-        );
-      })}
+      <div id="homepageCategoryHolder">
+        {categories.map((value, index) => {
+          return (
+            <>
+              <Link
+                href={`/play?category=${value}`}
+                key={index}
+                className="homepageCategoryLink"
+              >
+                {value}
+              </Link>
+            </>
+          );
+        })}
+      </div>
     </>
   );
 }
