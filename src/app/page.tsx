@@ -8,10 +8,9 @@ export default async function Home() {
     <>
       <h1>BendiTrivia</h1>
       {categories.map((value, index) => {
-        console.log(value);
         return (
           <>
-            <Link href={`/play?category=${value}`} key={index.toString()}>
+            <Link href={`/play?category=${value}`} key={index}>
               {value}
             </Link>
             <br></br>
