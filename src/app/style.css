@@ -36,6 +36,9 @@ body {
   padding: 20px;
   display: block;
 }
+.homepageCategoryLink:hover {
+  filter:brightness(0.75)
+}
 .cardHolder {
   display: flex;
   justify-content: center;
