@@ -1,4 +1,5 @@
 export const categories = [
+    "All", // specially treated by backend
     "Leisure",
     "Religion",
     "Food",
