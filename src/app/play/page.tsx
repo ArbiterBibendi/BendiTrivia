@@ -1,5 +1,6 @@
-import { Card } from "../../components/card";
-import { getTrivia } from "../../utils/trivia";
+import HomeNavLink from "@/components/homeNavLink";
+import { Card } from "@/components/card";
+import { getTrivia } from "@/utils/trivia";
 
 export default async function Home({
   searchParams,
@@ -9,7 +10,7 @@ export default async function Home({
   const trivia = await getTrivia(searchParams["id"], searchParams["category"]);
   return (
     <>
-      <h1>BendiTrivia</h1>
+      <HomeNavLink />
       <div className="cardHolder">
         <Card trivia={trivia} />
       </div>

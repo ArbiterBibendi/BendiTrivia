@@ -7,6 +7,11 @@ html {
 body {
   color: bisque;
 }
+.homeNavLink {
+  text-decoration: none;
+  color: inherit;
+  font-size: xx-large;
+}
 #homepageCategoryHolder {
   display: flex;
   flex-direction: row;
@@ -17,7 +22,7 @@ body {
   font-size: xx-large;
   color: black;
   text-decoration: none;
-  
+
   background-color: bisque;
   border-radius: 20px;
 
