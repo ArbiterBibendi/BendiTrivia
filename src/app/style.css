@@ -1,8 +1,8 @@
 html {
   background: linear-gradient(black, rgb(31, 31, 53));
   background-repeat: no-repeat;
+  min-height: 100vh;
   height: auto;
-  min-height: 100%;
 }
 body {
   color: bisque;
@@ -11,6 +11,11 @@ body {
   text-decoration: none;
   color: inherit;
   font-size: xx-large;
+}
+@media (max-height: 1000px) {
+  .homeNavLink {
+    font-size: large;
+  }
 }
 #homepageCategoryHolder {
   display: flex;
