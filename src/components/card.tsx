@@ -20,11 +20,23 @@ function getNewTrivia(category: string, pathName: string) {
 }
 function showReportDialogue() {
   const reportDialogue = document.querySelector("#reportDialogue");
-  reportDialogue?.setAttribute("style", "display: inline");
+  reportDialogue?.setAttribute("style", "display: flex");
+
+  const reportButton = document.querySelector("#reportButton");
+  reportButton?.setAttribute("style", "display: none");
+
+  const nextButton = document.querySelector("#nextButton");
+  nextButton?.setAttribute("style", "display: none");
 }
 function hideReportDialogue() {
   const reportDialogue = document.querySelector("#reportDialogue");
   reportDialogue?.setAttribute("style", "display: none");
+
+  const reportButton = document.querySelector("#reportButton");
+  reportButton?.setAttribute("style", "display: block");
+
+  const nextButton = document.querySelector("#nextButton");
+  nextButton?.setAttribute("style", "display: block");
 }
 async function reportCard(id: string) {
   const reasonTextArea: HTMLInputElement = document.querySelector(
@@ -72,7 +84,7 @@ export function Card({ trivia }: { trivia: Trivia }) {
       </div>
       <div id="buttonHolder">
         <button id="reportButton" onClick={() => showReportDialogue()}>
-          Report
+          <img src="/flag.svg" />
         </button>
 
         <button
@@ -83,8 +95,18 @@ export function Card({ trivia }: { trivia: Trivia }) {
         </button>
       </div>
       <div id="reportDialogue">
-        <textarea id="reportReason"></textarea>
-        <button onClick={() => reportCard(id)}>Submit Report</button>
+        <textarea
+          id="reportReason"
+          placeholder="Input reason for report"
+        ></textarea>
+        <div id="reportDialogueButtonHolder">
+          <button onClick={() => reportCard(id)} className="reportButton">
+            <img src="/rightarrow.svg" />
+          </button>
+          <button onClick={hideReportDialogue} className="reportButton">
+            <img src="/close.svg" />
+          </button>
+        </div>
       </div>
     </div>
   );

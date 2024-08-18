@@ -78,9 +78,38 @@ body {
   border: none;
   width: 25%;
 }
-#nextButton:hover {
+#reportButton {
+  background: none;
+  border: none;
+  width: 25%;
+}
+button:hover {
   filter: brightness(0.75);
+  border: 1px solid cyan;
 }
 #reportDialogue {
   display: none;
+  width: 100%;
+  justify-content: space-between;
+}
+#reportDialogueButtonHolder {
+  width: 40%;
+  height: 100%;
+  display: flex;
+}
+#reportReason {
+  width: 50%;
+  height: 90%;
+  resize: none;
+  background-color: rgb(196, 196, 196);
+  outline: none;
+  border: 1px solid black;
+}
+.reportButton {
+  width: 40%;
+  height: 100%;
+  border: none;
+  background: none;
+  padding-top: 5%;
+  border-radius: 10px;
 }
