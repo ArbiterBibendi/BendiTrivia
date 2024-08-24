@@ -1,7 +1,10 @@
-import { Trivia } from "../components/card";
+import type { Trivia } from "../components/card";
 
 const url: string = process.env.HOST_URL as string;
-export async function getTrivia(id?: string, category?: string): Promise<Trivia> {
+export async function getTrivia(
+  id?: string,
+  category?: string
+): Promise<Trivia> {
   // just pass id and category directly to trivia api
   const newSearchParams = new URLSearchParams();
   if (id) {
@@ -11,9 +14,9 @@ export async function getTrivia(id?: string, category?: string): Promise<Trivia>
     newSearchParams.set("category", category);
   }
   const response: Response = await fetch(
-    url +
-      "/api/trivia" +
-      (newSearchParams.size > 0 ? "?" + newSearchParams.toString() : ""),
+    `${url}/api/trivia${
+      newSearchParams.size > 0 ? `?${newSearchParams.toString()}` : ""
+    }`,
     {
       cache: "no-store",
     }

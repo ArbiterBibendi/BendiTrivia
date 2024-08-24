@@ -1,5 +1,7 @@
-import { QueryResult, sql } from "@vercel/postgres";
-import { NextRequest, NextResponse } from "next/server";
+import type { QueryResult } from "@vercel/postgres";
+import { sql } from "@vercel/postgres";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 const errorTrivia = {
   question: "No question found with those parameters",
@@ -7,11 +9,11 @@ const errorTrivia = {
   id: "-1",
 };
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
+  const { searchParams } = request.nextUrl;
   const qCategory: string | undefined | null = searchParams
     .get("category")
     ?.toLowerCase();
-  const requestedCategory = qCategory ? qCategory : "all";
+  const requestedCategory = qCategory || "all";
   const qId: string | null = searchParams.get("id");
 
   // only use category if no id is specified
@@ -19,7 +21,7 @@ export async function GET(request: NextRequest) {
   if (qId != null) {
     trivia =
       await sql`SELECT id, question, answer, category FROM trivia WHERE id=${Number(qId)}`;
-  } else if (requestedCategory == "all") {
+  } else if (requestedCategory === "all") {
     trivia =
       await sql`SELECT id, question, answer, category FROM trivia OFFSET floor(random() * (SELECT COUNT(*) FROM trivia)) LIMIT 1;`;
   } else {

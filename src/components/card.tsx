@@ -1,6 +1,7 @@
 "use client";
+
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export type Trivia = {
   question: string;
@@ -16,7 +17,7 @@ function revealAnswer(e: React.MouseEvent<HTMLElement>) {
   document.querySelector(".answer")?.setAttribute("style", "filter: none");
 }
 function getNewTrivia(category: string, pathName: string) {
-  window.location.href = `${pathName}?category=` + category;
+  window.location.href = `${pathName}?category=${category}`;
 }
 function showReportDialogue() {
   const reportDialogue = document.querySelector("#reportDialogue");
@@ -48,7 +49,7 @@ async function reportCard(id: string) {
     method: "POST",
     body: JSON.stringify({
       trivia_id: id,
-      reason: reason,
+      reason,
     }),
     headers: {
       "Content-Type": "application/json; charset=UTF-8",
@@ -73,38 +74,52 @@ export function Card({ trivia }: { trivia: Trivia }) {
       "",
       `${pathName}?category=${requestedCategory}&id=${id}`
     );
-  }, []);
+  }, [id, pathName, requestedCategory]);
 
   return (
-    <div className="card" onClick={revealAnswer}>
+    <div role="none" className="card" onClick={revealAnswer}>
       <div className="cardContents">
         <h3 className="category">{category}</h3>
         <h2>{question}</h2>
         <h2 className="answer">{answer}</h2>
       </div>
       <div id="buttonHolder">
-        <button id="reportButton" onClick={() => showReportDialogue()}>
-          <img src="/flag.svg" />
+        <button
+          aria-label="report"
+          type="button"
+          id="reportButton"
+          onClick={() => showReportDialogue()}
+        >
+          <img alt="show report dialogue" src="/flag.svg" />
         </button>
 
         <button
+          aria-label="next"
+          type="button"
           id="nextButton"
           onClick={() => getNewTrivia(requestedCategory, pathName)}
         >
-          <img src="/next.svg" />
+          <img alt="next card" src="/next.svg" />
         </button>
       </div>
       <div id="reportDialogue">
-        <textarea
-          id="reportReason"
-          placeholder="Input reason for report"
-        ></textarea>
+        <textarea id="reportReason" placeholder="Input reason for report" />
         <div id="reportDialogueButtonHolder">
-          <button onClick={() => reportCard(id)} className="reportButton">
-            <img src="/rightarrow.svg" />
+          <button
+            aria-label="show report dialogue"
+            type="button"
+            onClick={() => reportCard(id)}
+            className="reportButton"
+          >
+            <img alt="submit report" src="/rightarrow.svg" />
           </button>
-          <button onClick={hideReportDialogue} className="reportButton">
-            <img src="/close.svg" />
+          <button
+            aria-label="hide report dialogue"
+            type="button"
+            onClick={hideReportDialogue}
+            className="reportButton"
+          >
+            <img alt="hide report dialogue" src="/close.svg" />
           </button>
         </div>
       </div>
