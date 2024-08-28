@@ -29,6 +29,7 @@ export async function GET(request: NextRequest) {
       await sql`SELECT id, question, answer, category FROM trivia WHERE category ILIKE ${requestedCategory} OFFSET floor(random() * (SELECT COUNT(*) FROM trivia WHERE category ILIKE ${requestedCategory})) LIMIT 1;`;
   }
 
+  // return error placeholder card if no rows are returned
   if (trivia.rows.length <= 0) {
     return NextResponse.json({
       message: { ...errorTrivia, requestedCategory },
