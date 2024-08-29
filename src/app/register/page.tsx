@@ -11,12 +11,13 @@ async function onSubmit(e: FormEvent<HTMLFormElement>) {
       method: "POST",
       body: formData,
     });
+    console.log(await response.json());
   } catch (error) {
     console.error(error);
   }
 }
 
-export default async function Page() {
+export default function Page() {
   return (
     <>
       <h1>

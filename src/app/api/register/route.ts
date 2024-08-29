@@ -3,17 +3,13 @@ import { sql } from "@vercel/postgres";
 import { generateIdFromEntropySize } from "lucia";
 import { type NextRequest, NextResponse } from "next/server";
 
-type UserFormData = {
-  username: string;
-  password: string;
-};
 export async function POST(nextRequest: NextRequest) {
-  const request: unknown = await nextRequest.formData();
-  const userFormData: UserFormData = request as UserFormData;
-  const { username, password: plaintextPassword } = userFormData;
+  const request = await nextRequest.formData();
+  const username = request.get("username");
+  const password = request.get("password");
 
   // validate username and password
-  if (!username || !plaintextPassword) {
+  if (!username || !password) {
     return NextResponse.json({ error: "No username or no password supplied" });
   }
   if (
@@ -25,14 +21,14 @@ export async function POST(nextRequest: NextRequest) {
     return NextResponse.json({ error: "Invalid username" });
   }
   if (
-    typeof plaintextPassword !== "string" ||
-    plaintextPassword.length < 6 ||
-    plaintextPassword.length > 255
+    typeof password !== "string" ||
+    password.length < 6 ||
+    password.length > 255
   ) {
     return NextResponse.json({ error: "Invalid password" });
   }
 
-  const passwordHash = await hash(plaintextPassword, {
+  const passwordHash = await hash(password, {
     memoryCost: 19456,
     timeCost: 2,
     outputLen: 32,
@@ -41,7 +37,6 @@ export async function POST(nextRequest: NextRequest) {
   const userId = generateIdFromEntropySize(10);
 
   const result =
-    await sql`INSERT INTO users (id, username, passwordHash, role) VALUES (${userId}, ${username}, ${passwordHash}, user)`;
-  if (result) console.log(request);
+    await sql`INSERT INTO users (id, username, passwordHash, role) VALUES (${userId}, ${username}, ${passwordHash}, 'user')`;
   return NextResponse.json({ message: "registering" });
 }
