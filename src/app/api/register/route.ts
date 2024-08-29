@@ -42,15 +42,19 @@ export async function POST(nextRequest: NextRequest) {
   });
   const userId = generateIdFromEntropySize(10);
 
+  // handle any database errors
   try {
     const result =
       await sql`INSERT INTO users (id, username, passwordHash, role) VALUES (${userId}, ${username}, ${passwordHash}, 'user')`;
   } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === DatabaseErrors.UniqueViolationError.message
-    ) {
-      return NextResponse.json({ error: "Username already exists" });
+    if (error instanceof Error) {
+      switch (error.message) {
+        case DatabaseErrors.UniqueViolationError.message:
+          return NextResponse.json({ error: "Username already exists" });
+          break;
+        default:
+          console.error(error.message);
+      }
     }
   }
   return NextResponse.json({ message: "Register success" });
