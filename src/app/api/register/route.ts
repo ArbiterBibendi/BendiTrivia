@@ -3,6 +3,12 @@ import { sql } from "@vercel/postgres";
 import { generateIdFromEntropySize } from "lucia";
 import { type NextRequest, NextResponse } from "next/server";
 
+const DatabaseErrors = {
+  UniqueViolationError: {
+    message:
+      'duplicate key value violates unique constraint "users_username_key"',
+  },
+};
 export async function POST(nextRequest: NextRequest) {
   const request = await nextRequest.formData();
   const username = request.get("username");
@@ -36,7 +42,16 @@ export async function POST(nextRequest: NextRequest) {
   });
   const userId = generateIdFromEntropySize(10);
 
-  const result =
-    await sql`INSERT INTO users (id, username, passwordHash, role) VALUES (${userId}, ${username}, ${passwordHash}, 'user')`;
-  return NextResponse.json({ message: "registering" });
+  try {
+    const result =
+      await sql`INSERT INTO users (id, username, passwordHash, role) VALUES (${userId}, ${username}, ${passwordHash}, 'user')`;
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message === DatabaseErrors.UniqueViolationError.message
+    ) {
+      return NextResponse.json({ error: "Username already exists" });
+    }
+  }
+  return NextResponse.json({ message: "Register success" });
 }
