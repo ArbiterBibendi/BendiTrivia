@@ -1,4 +1,4 @@
-import { validatePassword, validateUsername } from "@/utils/auth";
+import { argonOptions, validatePassword, validateUsername } from "@/utils/auth";
 import { hash } from "@node-rs/argon2";
 import { sql } from "@vercel/postgres";
 import { generateIdFromEntropySize } from "lucia";
@@ -11,9 +11,9 @@ const DatabaseErrors = {
   },
 };
 export async function POST(nextRequest: NextRequest) {
-  const request = await nextRequest.formData();
-  const username = request.get("username") as string;
-  const password = request.get("password") as string;
+  const formData = await nextRequest.formData();
+  const username = formData.get("username") as string;
+  const password = formData.get("password") as string;
 
   // validate username and password
   const usernameValidation = validateUsername(username);
@@ -26,12 +26,7 @@ export async function POST(nextRequest: NextRequest) {
     return passwordValidation.response;
   }
 
-  const passwordHash = await hash(password, {
-    memoryCost: 19456,
-    timeCost: 2,
-    outputLen: 32,
-    parallelism: 1,
-  });
+  const passwordHash = await hash(password, argonOptions);
   const userId = generateIdFromEntropySize(10);
 
   // handle any database errors

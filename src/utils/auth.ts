@@ -26,6 +26,18 @@ export const lucia = new Lucia(adapter, {
   },
 });
 
+export const argonOptions = {
+  memoryCost: 19456,
+  timeCost: 2,
+  outputLen: 32,
+  parallelism: 1,
+};
+export type dbUser = {
+  username: string;
+  passwordHash: string;
+  id: string;
+  role: string;
+};
 export type ValidationResponseObject = {
   valid: boolean;
   response: NextResponse;
