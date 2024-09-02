@@ -46,7 +46,6 @@ async function reportCard(id: string) {
     "#reportReason"
   ) as HTMLInputElement;
   const reason = reasonTextArea?.value;
-  console.log(reason);
   const response = await fetch("/api/report", {
     method: "POST",
     body: JSON.stringify({
@@ -60,8 +59,6 @@ async function reportCard(id: string) {
   const reportResponse: ReportResponse = await response.json();
   if (!response.ok) {
     console.error("Something went wrong while reporting card.");
-  } else {
-    console.log(reportResponse.message);
   }
   hideReportDialogue();
 }

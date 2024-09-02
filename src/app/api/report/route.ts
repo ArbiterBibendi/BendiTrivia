@@ -9,11 +9,9 @@ export async function POST(nextRequest: NextRequest) {
     return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
   }
   const request = await nextRequest.json();
-  console.log(request);
   if (request.trivia_id && request.reason) {
     const sqlResponse =
       await sql`INSERT INTO reports (trivia_id, info) VALUES (${request.trivia_id}, ${request.reason})`;
-    console.log(sqlResponse);
   }
   return NextResponse.json({
     message: "Recieved",
