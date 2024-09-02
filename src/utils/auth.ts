@@ -34,7 +34,7 @@ export const argonOptions = {
 };
 export type dbUser = {
   username: string;
-  passwordHash: string;
+  passwordhash: string;
   id: string;
   role: string;
 };

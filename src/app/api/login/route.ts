@@ -13,15 +13,13 @@ export async function POST(nextRequest: NextRequest) {
   if (!usernameValidation.valid) {
     return usernameValidation.response;
   }
-
   // this checks the password requirements, not whether the password matches
   const passwordValidation = validatePassword(password);
   if (!passwordValidation.valid) {
     return passwordValidation.response;
   }
 
-  const dbResponse =
-    await sql`SELECT * FROM users WHERE username='${username}'`;
+  const dbResponse = await sql`SELECT * FROM users WHERE username=${username}`;
   if (dbResponse.rows.length <= 0) {
     return NextResponse.json({ error: "Username or password incorrect" });
   }
@@ -29,7 +27,7 @@ export async function POST(nextRequest: NextRequest) {
 
   // this checks whether the password matches
   const validPassword = await verify(
-    existingUser.passwordHash,
+    existingUser.passwordhash,
     password,
     argonOptions
   );
@@ -37,4 +35,6 @@ export async function POST(nextRequest: NextRequest) {
   if (!validPassword) {
     return NextResponse.json({ error: "Username or password incorrect" });
   }
+
+  return NextResponse.json({ message: `Login success to ${username}` });
 }
