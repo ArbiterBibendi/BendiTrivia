@@ -1,5 +1,6 @@
 "use client";
 
+import { redirect } from "next/navigation";
 import { FormEvent } from "react";
 
 async function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -11,6 +12,9 @@ async function onSubmit(e: FormEvent<HTMLFormElement>) {
       method: "POST",
       body: formData,
     });
+    if (response.status == 201) {
+      window.location.replace("/");
+    }
   } catch (error) {
     console.error(error);
   }

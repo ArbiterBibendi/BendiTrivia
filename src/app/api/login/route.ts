@@ -26,7 +26,10 @@ export async function POST(nextRequest: NextRequest) {
 
   const dbResponse = await sql`SELECT * FROM users WHERE username=${username}`;
   if (dbResponse.rows.length <= 0) {
-    return NextResponse.json({ error: "Username or password incorrect" });
+    return NextResponse.json(
+      { error: "Username or password incorrect" },
+      { status: 401 }
+    );
   }
   const existingUser = dbResponse.rows[0] as dbUser;
 
@@ -38,14 +41,20 @@ export async function POST(nextRequest: NextRequest) {
   );
 
   if (!validPassword) {
-    return NextResponse.json({ error: "Username or password incorrect" });
+    return NextResponse.json(
+      { error: "Username or password incorrect" },
+      { status: 401 }
+    );
   }
 
   const response = createSessionAndSetCookie(
     existingUser.id,
-    NextResponse.json({
-      message: `Login success to ${username}`,
-    })
+    NextResponse.json(
+      {
+        message: `Login success to ${username}`,
+      },
+      { status: 200 }
+    )
   );
   return response;
 }

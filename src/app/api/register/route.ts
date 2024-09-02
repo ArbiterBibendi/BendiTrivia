@@ -51,7 +51,7 @@ export async function POST(nextRequest: NextRequest) {
   }
   const response = createSessionAndSetCookie(
     userId,
-    NextResponse.json({ message: "Register success" })
+    NextResponse.json({ message: "success" }, { status: 201 })
   );
   return response;
 }
