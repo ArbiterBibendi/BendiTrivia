@@ -1,3 +1,4 @@
+import { validateRequest } from "@/utils/auth";
 import type { QueryResult } from "@vercel/postgres";
 import { sql } from "@vercel/postgres";
 import type { NextRequest } from "next/server";
@@ -9,6 +10,10 @@ const errorTrivia = {
   id: "-1",
 };
 export async function GET(request: NextRequest) {
+  const { user } = await validateRequest();
+  if (!user) {
+    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
+  }
   const { searchParams } = request.nextUrl;
   const qCategory: string | undefined | null = searchParams
     .get("category")

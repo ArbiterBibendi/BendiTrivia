@@ -4,8 +4,15 @@ import { v4 as uuidv4 } from "uuid";
 import HomeNavLink from "@/components/homeNavLink";
 
 import categories from "../utils/categories";
+import { redirect } from "next/navigation";
+import { validateRequest } from "@/utils/auth";
 
 export default async function Home() {
+  const { user } = await validateRequest();
+  if (!user) {
+    redirect("/login");
+  }
+
   return (
     <>
       <HomeNavLink />
