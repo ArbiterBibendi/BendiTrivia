@@ -38,7 +38,6 @@ export async function POST(nextRequest: NextRequest) {
   try {
     const result =
       await sql`INSERT INTO users (id, username, passwordHash, role) VALUES (${userId}, ${username}, ${passwordHash}, 'user')`;
-    createSessionAndSetCookie(userId);
   } catch (error) {
     if (error instanceof Error) {
       switch (error.message) {
@@ -50,5 +49,9 @@ export async function POST(nextRequest: NextRequest) {
       }
     }
   }
-  return NextResponse.json({ message: "Register success" });
+  const response = createSessionAndSetCookie(
+    userId,
+    NextResponse.json({ message: "Register success" })
+  );
+  return response;
 }

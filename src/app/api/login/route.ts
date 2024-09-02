@@ -41,6 +41,11 @@ export async function POST(nextRequest: NextRequest) {
     return NextResponse.json({ error: "Username or password incorrect" });
   }
 
-  createSessionAndSetCookie(existingUser.id);
-  return NextResponse.json({ message: `Login success to ${username}` });
+  const response = createSessionAndSetCookie(
+    existingUser.id,
+    NextResponse.json({
+      message: `Login success to ${username}`,
+    })
+  );
+  return response;
 }

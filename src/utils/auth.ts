@@ -5,7 +5,13 @@ import type { User, Session } from "lucia";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-const sql = postgres();
+const sql = postgres({
+  host: process.env.POSTGRES_HOST,
+  database: process.env.POSTGRES_DATABASE,
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  ssl: "require",
+});
 const adapter = new PostgresJsAdapter(sql, {
   user: "users",
   session: "user_sessions",
@@ -93,7 +99,7 @@ export function validatePassword(password: string): ValidationResponseObject {
   };
 }
 
-export async function validateRequest(user: User, session: Session) {
+export async function validateRequest() {
   const sessionId = cookies().get(lucia.sessionCookieName);
   if (!sessionId) {
     return {
@@ -122,6 +128,19 @@ export async function validateRequest(user: User, session: Session) {
     }
   } catch {}
   return result;
+}
+export async function createSessionAndSetCookie(
+  userId: string,
+  nextResponse: NextResponse
+) {
+  const session = await lucia.createSession(userId, {});
+  const sessionCookie = lucia.createSessionCookie(session.id);
+  nextResponse.cookies.set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
+  return nextResponse;
 }
 
 interface DatabaseUserAttributes {
