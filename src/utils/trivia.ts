@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import type { Trivia } from "../components/card";
 
 const url: string = process.env.HOST_URL as string;
@@ -19,12 +20,12 @@ export async function getTrivia(
     }`,
     {
       cache: "no-store",
+      headers: headers(),
     }
   );
 
   if (!response.ok) {
-    console.log(response);
-    throw new Error("Something went wrong fetching trivia");
+    console.error("Something went wrong fetching trivia");
   }
   const responseJson = await response.json();
   const trivia: Trivia = responseJson.message;
