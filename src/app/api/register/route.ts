@@ -1,4 +1,9 @@
-import { argonOptions, validatePassword, validateUsername } from "@/utils/auth";
+import {
+  argonOptions,
+  createSessionAndSetCookie,
+  validatePassword,
+  validateUsername,
+} from "@/utils/auth";
 import { hash } from "@node-rs/argon2";
 import { sql } from "@vercel/postgres";
 import { generateIdFromEntropySize } from "lucia";
@@ -33,6 +38,7 @@ export async function POST(nextRequest: NextRequest) {
   try {
     const result =
       await sql`INSERT INTO users (id, username, passwordHash, role) VALUES (${userId}, ${username}, ${passwordHash}, 'user')`;
+    createSessionAndSetCookie(userId);
   } catch (error) {
     if (error instanceof Error) {
       switch (error.message) {

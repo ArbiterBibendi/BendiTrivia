@@ -1,4 +1,9 @@
-import { argonOptions, validatePassword, validateUsername } from "@/utils/auth";
+import {
+  argonOptions,
+  createSessionAndSetCookie,
+  validatePassword,
+  validateUsername,
+} from "@/utils/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { verify } from "@node-rs/argon2";
@@ -36,5 +41,6 @@ export async function POST(nextRequest: NextRequest) {
     return NextResponse.json({ error: "Username or password incorrect" });
   }
 
+  createSessionAndSetCookie(existingUser.id);
   return NextResponse.json({ message: `Login success to ${username}` });
 }
