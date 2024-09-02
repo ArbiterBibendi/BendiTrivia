@@ -1,3 +1,4 @@
+import { validatePassword, validateUsername } from "@/utils/auth";
 import { hash } from "@node-rs/argon2";
 import { sql } from "@vercel/postgres";
 import { generateIdFromEntropySize } from "lucia";
@@ -11,27 +12,18 @@ const DatabaseErrors = {
 };
 export async function POST(nextRequest: NextRequest) {
   const request = await nextRequest.formData();
-  const username = request.get("username");
-  const password = request.get("password");
+  const username = request.get("username") as string;
+  const password = request.get("password") as string;
 
   // validate username and password
-  if (!username || !password) {
-    return NextResponse.json({ error: "No username or no password supplied" });
+  const usernameValidation = validateUsername(username);
+  if (!usernameValidation.valid) {
+    return usernameValidation.response;
   }
-  if (
-    typeof username !== "string" ||
-    username.length < 3 ||
-    username.length > 31 ||
-    !/^[a-z0-9_-]+$/.test(username)
-  ) {
-    return NextResponse.json({ error: "Invalid username" });
-  }
-  if (
-    typeof password !== "string" ||
-    password.length < 6 ||
-    password.length > 255
-  ) {
-    return NextResponse.json({ error: "Invalid password" });
+
+  const passwordValidation = validatePassword(password);
+  if (!passwordValidation.valid) {
+    return passwordValidation.response;
   }
 
   const passwordHash = await hash(password, {

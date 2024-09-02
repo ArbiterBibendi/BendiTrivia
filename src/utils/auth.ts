@@ -3,6 +3,7 @@ import { Lucia } from "lucia";
 import postgres from "postgres";
 import type { User, Session } from "lucia";
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 const sql = postgres();
 const adapter = new PostgresJsAdapter(sql, {
@@ -24,6 +25,61 @@ export const lucia = new Lucia(adapter, {
     };
   },
 });
+
+export type ValidationResponseObject = {
+  valid: boolean;
+  response: NextResponse;
+};
+export function validateUsername(username: string): ValidationResponseObject {
+  if (!username) {
+    return {
+      valid: false,
+      response: NextResponse.json({ error: "No username supplied" }),
+    };
+  }
+
+  if (
+    typeof username !== "string" ||
+    username.length < 3 ||
+    username.length > 31 ||
+    !/^[a-z0-9_-]+$/.test(username)
+  ) {
+    return {
+      valid: false,
+      response: NextResponse.json({ error: "Invalid username" }),
+    };
+  }
+
+  return {
+    valid: true,
+    response: NextResponse.json({}),
+  };
+}
+
+export function validatePassword(password: string): ValidationResponseObject {
+  if (!password) {
+    return {
+      valid: false,
+      response: NextResponse.json({ error: "No password supplied" }),
+    };
+  }
+
+  if (
+    typeof password !== "string" ||
+    password.length < 6 ||
+    password.length > 255
+  ) {
+    return {
+      valid: false,
+      response: NextResponse.json({ error: "Invalid password" }),
+    };
+  }
+
+  return {
+    valid: true,
+    response: NextResponse.json({}),
+  };
+}
 
 export async function validateRequest(user: User, session: Session) {
   const sessionId = cookies().get(lucia.sessionCookieName);
