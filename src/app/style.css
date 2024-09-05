@@ -3,6 +3,8 @@ html {
   background-repeat: no-repeat;
   min-height: 100vh;
   height: auto;
+  display: flex;
+  justify-content: center;
 }
 body {
   color: bisque;
@@ -112,4 +114,14 @@ button:hover {
   background: none;
   padding-top: 5%;
   border-radius: 10px;
+}
+
+form {
+  label {
+    font-size: smaller;
+    margin: auto;
+  }
+  input {
+    margin-left: 15px;
+  }
 }

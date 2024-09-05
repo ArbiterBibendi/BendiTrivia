@@ -26,12 +26,31 @@ export default function Page() {
       <h1>
         Create an account
         <form onSubmit={onSubmit}>
-          <label htmlFor="username">Username</label>
-          <input name="username" id="username" />
-          <label htmlFor="password">Password</label>
-          <input type="password" name="password" id="pass" />
-          <br />
-          <button>Continue</button>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <label htmlFor="username">Username</label>
+                </td>
+                <td>
+                  <input name="username" id="username" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label htmlFor="password">Password</label>
+                </td>
+                <td>
+                  <input type="password" name="password" id="pass" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <button>Continue</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </form>
       </h1>
     </>
