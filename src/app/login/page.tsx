@@ -47,7 +47,7 @@ export default function Page() {
             </tr>
             <tr>
               <td>
-                <button>Continue</button>
+                <button>Sign in</button>
               </td>
             </tr>
           </tbody>

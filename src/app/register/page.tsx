@@ -46,7 +46,7 @@ export default function Page() {
             </tr>
             <tr>
               <td>
-                <button>Continue</button>
+                <button>Register</button>
               </td>
             </tr>
           </tbody>
