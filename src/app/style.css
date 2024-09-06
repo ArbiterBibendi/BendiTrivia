@@ -130,8 +130,9 @@ form {
     background-color: blanchedalmond;
     border-style: none;
     border-radius: 5px;
-    font-size: medium;
+    font-size: larger;
     margin-top: 10px;
+    padding: 0.5em 0.4em 0.5em 0.4em;
   }
   button:hover {
     filter: brightness(0.75);
