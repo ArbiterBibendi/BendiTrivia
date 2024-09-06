@@ -9,12 +9,25 @@ type ServerMessage = {
 };
 async function onSubmit(
   e: FormEvent<HTMLFormElement>,
-  serverMessageElement: RefObject<HTMLParagraphElement>
+  serverMessageElement: RefObject<HTMLParagraphElement>,
+  passwordRef: RefObject<HTMLInputElement>,
+  passwordConfirmRef: RefObject<HTMLInputElement>
 ) {
   e.preventDefault();
 
   try {
     const formData = new FormData(e.currentTarget);
+    if (
+      !passwordRef.current ||
+      !passwordConfirmRef.current ||
+      !serverMessageElement.current
+    ) {
+      return;
+    }
+    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+      serverMessageElement.current.innerText = "Passwords do not match";
+      return;
+    }
     const response = await fetch("/api/register", {
       method: "POST",
       body: formData,
@@ -32,14 +45,41 @@ async function onSubmit(
     console.error(error);
   }
 }
+function onConfirmPasswordInput(
+  e: React.FormEvent<HTMLInputElement>,
+  passwordRef: RefObject<HTMLInputElement>,
+  passwordConfirmRef: RefObject<HTMLInputElement>
+) {
+  if (!passwordRef.current || !passwordConfirmRef.current) {
+    return;
+  }
+  if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+    passwordRef.current.style.border = "2px solid red";
+    passwordConfirmRef.current.style.border = "2px solid red";
+  } else {
+    passwordRef.current.style.border = "2px solid green";
+    passwordConfirmRef.current.style.border = "2px solid green";
+  }
+}
 
 export default function Page() {
-  const serverMessageElement = useRef<HTMLParagraphElement>(null);
+  const serverMessageElementRef = useRef<HTMLParagraphElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const passwordConfirmRef = useRef<HTMLInputElement>(null);
   return (
     <>
       <h1>Create an account</h1>
 
-      <form onSubmit={(event) => onSubmit(event, serverMessageElement)}>
+      <form
+        onSubmit={(event) =>
+          onSubmit(
+            event,
+            serverMessageElementRef,
+            passwordRef,
+            passwordConfirmRef
+          )
+        }
+      >
         <table>
           <tbody>
             <tr>
@@ -55,7 +95,26 @@ export default function Page() {
                 <label htmlFor="password">Password</label>
               </td>
               <td>
-                <input type="password" name="password" id="pass" />
+                <input
+                  type="password"
+                  name="password"
+                  id="pass"
+                  ref={passwordRef}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label htmlFor="password">Confirm Password</label>
+              </td>
+              <td>
+                <input
+                  type="password"
+                  ref={passwordConfirmRef}
+                  onInput={(e) =>
+                    onConfirmPasswordInput(e, passwordRef, passwordConfirmRef)
+                  }
+                />
               </td>
             </tr>
             <tr>
@@ -68,7 +127,7 @@ export default function Page() {
                 <button>Register</button>
               </td>
               <td>
-                <p ref={serverMessageElement} className="serverMessage"></p>
+                <p ref={serverMessageElementRef} className="serverMessage"></p>
               </td>
             </tr>
           </tbody>

@@ -148,6 +148,8 @@ form {
   }
   input {
     margin-left: 15px;
+    outline: none;
+    border-radius: 5px;
   }
   table {
     margin-bottom: 5%;
