@@ -128,6 +128,12 @@ button:hover {
   font-size: smaller;
   color: yellow;
 }
+.hint {
+  font-size: small;
+  color: salmon;
+  margin-bottom: 0;
+  margin-left: 15px;
+}
 form {
   margin-top: 5%;
   button {
@@ -145,6 +151,8 @@ form {
   label {
     font-size: x-large;
     margin: auto;
+    vertical-align: bottom;
+    min-height: 100%;
   }
   input {
     margin-left: 15px;

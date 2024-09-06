@@ -65,8 +65,7 @@ export function validateUsername(username: string): ValidationResponseObject {
     return {
       valid: false,
       response: NextResponse.json({
-        error:
-          "Invalid username.\n Must be greater than 3 characters and not contain any special characters (other than _ and -)",
+        error: "Invalid username.",
       }),
     };
   }

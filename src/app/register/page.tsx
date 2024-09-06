@@ -1,7 +1,8 @@
 "use client";
 
+import { FormHint } from "@/components/formHint";
 import { redirect } from "next/navigation";
-import { FormEvent, RefObject, useRef } from "react";
+import { FormEvent, RefObject, SetStateAction, useRef, useState } from "react";
 
 type ServerMessage = {
   error?: string;
@@ -45,12 +46,53 @@ async function onSubmit(
     console.error(error);
   }
 }
-function onConfirmPasswordInput(
+function onFocus(
+  e: React.FormEvent<HTMLInputElement>,
+  usernameRef: RefObject<HTMLInputElement>,
+  setUsernameHint: Function,
+  passwordRef: RefObject<HTMLInputElement>,
+  setPasswordHint: Function
+) {
+  if (!usernameRef.current || !passwordRef.current) {
+    return;
+  }
+  if (
+    e.currentTarget != usernameRef.current &&
+    usernameRef.current?.value != ""
+  ) {
+    if (usernameRef.current?.value.length < 3) {
+      setUsernameHint(" * Must be at least 3 characters");
+    } else if (!/^[a-z0-9_-]+$/.test(usernameRef.current?.value)) {
+      setUsernameHint(
+        " * Must not contain any special characters other than _ and -"
+      );
+    } else {
+      setUsernameHint("");
+    }
+  }
+  if (
+    e.currentTarget != passwordRef.current &&
+    passwordRef.current?.value != ""
+  ) {
+    if (passwordRef.current?.value.length < 6) {
+      setPasswordHint(" * Must be at least 6 characters");
+    } else {
+      setPasswordHint("");
+    }
+  }
+}
+function onPasswordInput(
   e: React.FormEvent<HTMLInputElement>,
   passwordRef: RefObject<HTMLInputElement>,
   passwordConfirmRef: RefObject<HTMLInputElement>
 ) {
   if (!passwordRef.current || !passwordConfirmRef.current) {
+    return;
+  }
+  if (
+    passwordRef.current.value == "" ||
+    passwordConfirmRef.current.value == ""
+  ) {
     return;
   }
   if (passwordRef.current.value !== passwordConfirmRef.current.value) {
@@ -64,8 +106,12 @@ function onConfirmPasswordInput(
 
 export default function Page() {
   const serverMessageElementRef = useRef<HTMLParagraphElement>(null);
+  const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordConfirmRef = useRef<HTMLInputElement>(null);
+
+  const [usernameHint, setUsernameHint] = useState("");
+  const [passwordHint, setPasswordHint] = useState("");
   return (
     <>
       <h1>Create an account</h1>
@@ -82,14 +128,29 @@ export default function Page() {
       >
         <table>
           <tbody>
+            <FormHint hint={usernameHint} />
             <tr>
               <td>
                 <label htmlFor="username">Username</label>
               </td>
               <td>
-                <input name="username" id="username" />
+                <input
+                  name="username"
+                  id="username"
+                  ref={usernameRef}
+                  onFocus={(e) =>
+                    onFocus(
+                      e,
+                      usernameRef,
+                      setUsernameHint,
+                      passwordRef,
+                      setPasswordHint
+                    )
+                  }
+                />
               </td>
             </tr>
+            <FormHint hint={passwordHint} />
             <tr>
               <td>
                 <label htmlFor="password">Password</label>
@@ -100,6 +161,18 @@ export default function Page() {
                   name="password"
                   id="pass"
                   ref={passwordRef}
+                  onFocus={(e) =>
+                    onFocus(
+                      e,
+                      usernameRef,
+                      setUsernameHint,
+                      passwordRef,
+                      setPasswordHint
+                    )
+                  }
+                  onInput={(e) =>
+                    onPasswordInput(e, passwordRef, passwordConfirmRef)
+                  }
                 />
               </td>
             </tr>
@@ -112,14 +185,18 @@ export default function Page() {
                   type="password"
                   ref={passwordConfirmRef}
                   onInput={(e) =>
-                    onConfirmPasswordInput(e, passwordRef, passwordConfirmRef)
+                    onPasswordInput(e, passwordRef, passwordConfirmRef)
+                  }
+                  onFocus={(e) =>
+                    onFocus(
+                      e,
+                      usernameRef,
+                      setUsernameHint,
+                      passwordRef,
+                      setPasswordHint
+                    )
                   }
                 />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <p>Password must be at least 6 characters</p>
               </td>
             </tr>
             <tr>
