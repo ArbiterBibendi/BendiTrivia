@@ -27,6 +27,7 @@ h1 {
   flex-direction: row;
   flex-wrap: wrap;
   overflow: auto;
+  border: 1px solid white;
 }
 .homepageCategoryLink {
   font-size: xx-large;
@@ -40,6 +41,10 @@ h1 {
   margin: 15px;
   padding: 20px;
   display: block;
+}
+#selectacategory {
+  text-align: center;
+  border-bottom: none;
 }
 .homepageCategoryLink:hover {
   filter: brightness(0.75);

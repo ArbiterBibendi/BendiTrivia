@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { v4 as uuidv4 } from "uuid";
 
-import HomeNavLink from "@/components/homeNavLink";
+import HomeNav from "@/components/homeNavLink";
 
 import categories from "../utils/categories";
 import { redirect } from "next/navigation";
@@ -15,7 +15,8 @@ export default async function Home() {
 
   return (
     <>
-      <HomeNavLink />
+      <HomeNav />
+      <h1 id="selectacategory">Select a category</h1>
       <div id="homepageCategoryHolder">
         {categories.map((value: string) => {
           return (

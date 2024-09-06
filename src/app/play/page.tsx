@@ -1,5 +1,5 @@
 import { Card } from "@/components/card";
-import HomeNavLink from "@/components/homeNavLink";
+import HomeNav from "@/components/homeNavLink";
 import { validateRequest } from "@/utils/auth";
 import { getTrivia } from "@/utils/trivia";
 import { redirect } from "next/navigation";
@@ -16,7 +16,7 @@ export default async function Home({
   const trivia = await getTrivia(searchParams.id, searchParams.category);
   return (
     <>
-      <HomeNavLink />
+      <HomeNav />
       <div className="cardHolder">
         <Card trivia={trivia} />
       </div>
