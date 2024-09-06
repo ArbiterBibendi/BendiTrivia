@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { FormEvent, RefObject, useRef } from "react";
 
 type ServerMessage = {

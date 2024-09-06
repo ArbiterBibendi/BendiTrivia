@@ -1,7 +1,6 @@
 "use client";
 
 import { FormHint } from "@/components/formHint";
-import { redirect } from "next/navigation";
 import { FormEvent, RefObject, SetStateAction, useRef, useState } from "react";
 
 type ServerMessage = {

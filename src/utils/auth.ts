@@ -101,8 +101,9 @@ export function validatePassword(password: string): ValidationResponseObject {
   };
 }
 
+export const sessionCookieName = "auth_session";
 export async function validateRequest() {
-  const sessionId = cookies().get(lucia.sessionCookieName);
+  const sessionId = cookies().get(sessionCookieName);
   if (!sessionId) {
     return {
       user: null,
@@ -115,7 +116,7 @@ export async function validateRequest() {
     if (result.session && result.session.fresh) {
       const sessionCookie = lucia.createSessionCookie(result.session.id);
       cookies().set(
-        sessionCookie.name,
+        sessionCookieName,
         sessionCookie.value,
         sessionCookie.attributes
       );
@@ -123,7 +124,7 @@ export async function validateRequest() {
     if (!result.session) {
       const sessionCookie = lucia.createBlankSessionCookie();
       cookies().set(
-        sessionCookie.name,
+        sessionCookieName,
         sessionCookie.value,
         sessionCookie.attributes
       );
@@ -138,21 +139,19 @@ export async function createSessionAndSetCookie(
   const session = await lucia.createSession(userId, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
   nextResponse.cookies.set(
-    sessionCookie.name,
+    sessionCookieName,
     sessionCookie.value,
     sessionCookie.attributes
   );
   return nextResponse;
 }
-export async function invalidateSessionAndSetBlankCookie() {
-  const sessionId = cookies().get(lucia.sessionCookieName);
-  const response = NextResponse.json(
-    { message: "Logging out" },
-    { status: 200 }
-  );
+export async function invalidateSessionAndSetBlankCookie(
+  response: NextResponse
+) {
+  const sessionId = cookies().get(sessionCookieName);
   const blankCookie = lucia.createBlankSessionCookie();
   response.cookies.set(
-    blankCookie.name,
+    sessionCookieName,
     blankCookie.value,
     blankCookie.attributes
   );
