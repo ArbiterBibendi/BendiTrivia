@@ -144,6 +144,24 @@ export async function createSessionAndSetCookie(
   );
   return nextResponse;
 }
+export async function invalidateSessionAndSetBlankCookie() {
+  const sessionId = cookies().get(lucia.sessionCookieName);
+  const response = NextResponse.json(
+    { message: "Logging out" },
+    { status: 200 }
+  );
+  const blankCookie = lucia.createBlankSessionCookie();
+  response.cookies.set(
+    blankCookie.name,
+    blankCookie.value,
+    blankCookie.attributes
+  );
+  if (!sessionId) {
+    return response;
+  }
+  await lucia.invalidateSession(sessionId.value);
+  return response;
+}
 
 interface DatabaseUserAttributes {
   username: string;
