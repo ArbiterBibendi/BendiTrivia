@@ -124,6 +124,10 @@ button:hover {
   border-radius: 10px;
 }
 
+.serverMessage {
+  font-size: smaller;
+  color: yellow;
+}
 form {
   margin-top: 5%;
   button {
@@ -155,6 +159,9 @@ form {
     color: gray;
   }
   a:visited {
+    color: white;
+  }
+  p {
     color: white;
   }
 }

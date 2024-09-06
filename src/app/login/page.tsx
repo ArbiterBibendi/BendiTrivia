@@ -2,9 +2,16 @@
 
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { FormEvent } from "react";
+import { FormEvent, RefObject, useRef } from "react";
 
-async function onSubmit(e: FormEvent<HTMLFormElement>) {
+type ServerMessage = {
+  error?: string;
+  message?: string;
+};
+async function onSubmit(
+  e: FormEvent<HTMLFormElement>,
+  serverMessageElement: RefObject<HTMLParagraphElement>
+) {
   e.preventDefault();
 
   try {
@@ -15,6 +22,12 @@ async function onSubmit(e: FormEvent<HTMLFormElement>) {
     });
     if (response.ok) {
       window.location.replace("/");
+    } else {
+      const responseBody: ServerMessage = await response.json();
+      if (serverMessageElement.current) {
+        serverMessageElement.current.innerText =
+          responseBody.error || responseBody.message || "";
+      }
     }
   } catch (error) {
     console.error(error);
@@ -22,11 +35,12 @@ async function onSubmit(e: FormEvent<HTMLFormElement>) {
 }
 
 export default function Page() {
+  const serverMessageElement = useRef<HTMLParagraphElement>(null);
   return (
     <>
       <h1>Login</h1>
 
-      <form onSubmit={onSubmit}>
+      <form onSubmit={(event) => onSubmit(event, serverMessageElement)}>
         <table>
           <tbody>
             <tr>
@@ -48,6 +62,9 @@ export default function Page() {
             <tr>
               <td>
                 <button>Sign in</button>
+              </td>
+              <td>
+                <p ref={serverMessageElement} className="serverMessage"></p>
               </td>
             </tr>
           </tbody>
