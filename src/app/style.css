@@ -16,18 +16,32 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 90%;
+  margin-right: 5%;
   h1 {
     border: none;
   }
   a {
     vertical-align: bottom;
+    text-decoration: none;
+    color: gray;
+    font-weight: bold;
+  }
+  a:visited {
+    color: gray;
+    text-decoration: none;
+  }
+  h1 {
+    font-size: 2em;
   }
 }
 .homeNavLink {
   text-decoration: none;
   color: inherit;
   font-size: xx-large;
+}
+.homeNavLink:visited {
+  color: inherit;
 }
 @media (max-height: 1000px) {
   .homeNavLink {
@@ -40,6 +54,7 @@ nav {
   flex-wrap: wrap;
   overflow: auto;
   border: 1px solid white;
+  max-width: 750px;
 }
 .homepageCategoryLink {
   font-size: xx-large;
