@@ -3,7 +3,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { RefObject, useEffect, useRef } from "react";
 
 export type Trivia = {
   question: string;
@@ -15,36 +15,52 @@ export type Trivia = {
 export type ReportResponse = {
   message: string;
 };
-function revealAnswer(e: React.MouseEvent<HTMLElement>) {
-  document.querySelector(".answer")?.setAttribute("style", "filter: none");
+function revealAnswer(
+  e: React.MouseEvent<HTMLElement>,
+  answerRef: RefObject<HTMLElement>
+) {
+  const answerElement = answerRef.current;
+  answerElement?.setAttribute("style", "filter: none");
 }
 function getNewTrivia(category: string, pathName: string) {
   window.location.href = `${pathName}?category=${category}`;
 }
-function showReportDialogue() {
-  const reportDialogue = document.querySelector("#reportDialogue");
+function showReportDialogue(
+  reportDialogueRef: RefObject<HTMLElement>,
+  reportButtonRef: RefObject<HTMLElement>,
+  nextButtonRef: RefObject<HTMLElement>
+) {
+  const reportDialogue = reportDialogueRef.current;
   reportDialogue?.setAttribute("style", "display: flex");
 
-  const reportButton = document.querySelector("#reportButton");
+  const reportButton = reportButtonRef.current;
   reportButton?.setAttribute("style", "display: none");
 
-  const nextButton = document.querySelector("#nextButton");
+  const nextButton = nextButtonRef.current;
   nextButton?.setAttribute("style", "display: none");
 }
-function hideReportDialogue() {
-  const reportDialogue = document.querySelector("#reportDialogue");
+function hideReportDialogue(
+  reportDialogueRef: RefObject<HTMLElement>,
+  reportButtonRef: RefObject<HTMLElement>,
+  nextButtonRef: RefObject<HTMLElement>
+) {
+  const reportDialogue = reportDialogueRef.current;
   reportDialogue?.setAttribute("style", "display: none");
 
-  const reportButton = document.querySelector("#reportButton");
+  const reportButton = reportButtonRef.current;
   reportButton?.setAttribute("style", "display: block");
 
-  const nextButton = document.querySelector("#nextButton");
+  const nextButton = nextButtonRef.current;
   nextButton?.setAttribute("style", "display: block");
 }
-async function reportCard(id: string) {
-  const reasonTextArea: HTMLInputElement = document.querySelector(
-    "#reportReason"
-  ) as HTMLInputElement;
+async function reportCard(
+  id: string,
+  reportReasonRef: RefObject<HTMLInputElement>,
+  reportDialogueRef: RefObject<HTMLElement>,
+  reportButtonRef: RefObject<HTMLElement>,
+  nextButtonRef: RefObject<HTMLElement>
+) {
+  const reasonTextArea = reportReasonRef.current;
   const reason = reasonTextArea?.value;
   const response = await fetch("/api/report", {
     method: "POST",
@@ -60,10 +76,16 @@ async function reportCard(id: string) {
   if (!response.ok) {
     console.error("Something went wrong while reporting card.");
   }
-  hideReportDialogue();
+  hideReportDialogue(reportDialogueRef, reportButtonRef, nextButtonRef);
 }
 export function Card({ trivia }: { trivia: Trivia }) {
   const { question, answer, category, id, requestedCategory }: Trivia = trivia;
+  // answer, reportDialogue, reportButton, nextButton. reportReason
+  const answerRef = useRef(null);
+  const reportDialogueRef = useRef(null);
+  const reportButtonRef = useRef(null);
+  const nextButtonRef = useRef(null);
+  const reportReasonRef = useRef(null);
   const pathName = usePathname();
 
   useEffect(() => {
@@ -76,18 +98,31 @@ export function Card({ trivia }: { trivia: Trivia }) {
   }, [id, pathName, requestedCategory]);
 
   return (
-    <div role="none" className="card" onClick={revealAnswer}>
+    <div
+      role="none"
+      className="card"
+      onClick={(e) => revealAnswer(e, answerRef)}
+    >
       <div className="cardContents">
         <h3 className="category">{category}</h3>
         <h2>{question}</h2>
-        <h2 className="answer">{answer}</h2>
+        <h2 className="answer" ref={answerRef}>
+          {answer}
+        </h2>
       </div>
       <div id="buttonHolder">
         <button
           aria-label="report"
           type="button"
           id="reportButton"
-          onClick={() => showReportDialogue()}
+          onClick={() =>
+            showReportDialogue(
+              reportDialogueRef,
+              reportButtonRef,
+              nextButtonRef
+            )
+          }
+          ref={reportButtonRef}
         >
           <img alt="show report dialogue" src="/flag.svg" />
         </button>
@@ -97,17 +132,30 @@ export function Card({ trivia }: { trivia: Trivia }) {
           type="button"
           id="nextButton"
           onClick={() => getNewTrivia(requestedCategory, pathName)}
+          ref={nextButtonRef}
         >
           <img alt="next card" src="/next.svg" />
         </button>
       </div>
-      <div id="reportDialogue">
-        <textarea id="reportReason" placeholder="Input reason for report" />
+      <div id="reportDialogue" ref={reportDialogueRef}>
+        <textarea
+          id="reportReason"
+          placeholder="Input reason for report"
+          ref={reportReasonRef}
+        />
         <div id="reportDialogueButtonHolder">
           <button
             aria-label="show report dialogue"
             type="button"
-            onClick={() => reportCard(id)}
+            onClick={() =>
+              reportCard(
+                id,
+                reportReasonRef,
+                reportDialogueRef,
+                reportButtonRef,
+                nextButtonRef
+              )
+            }
             className="reportButton"
           >
             <img alt="submit report" src="/rightarrow.svg" />
@@ -115,7 +163,13 @@ export function Card({ trivia }: { trivia: Trivia }) {
           <button
             aria-label="hide report dialogue"
             type="button"
-            onClick={hideReportDialogue}
+            onClick={() =>
+              hideReportDialogue(
+                reportDialogueRef,
+                reportButtonRef,
+                nextButtonRef
+              )
+            }
             className="reportButton"
           >
             <img alt="hide report dialogue" src="/close.svg" />
