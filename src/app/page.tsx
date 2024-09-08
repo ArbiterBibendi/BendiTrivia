@@ -17,13 +17,13 @@ export default async function Home() {
       <div id="homepageCategoryHolder">
         {categories.map((value: string) => {
           return (
-            <Link
+            <a
               href={`/play?category=${value}`}
               key={uuidv4()}
               className="homepageCategoryLink"
             >
               {value}
-            </Link>
+            </a>
           );
         })}
       </div>

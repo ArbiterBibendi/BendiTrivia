@@ -4,14 +4,8 @@
 
 import { usePathname } from "next/navigation";
 import { RefObject, useEffect, useRef } from "react";
+import { Trivia } from "@/utils/trivia";
 
-export type Trivia = {
-  question: string;
-  answer: string;
-  category: string;
-  id: string;
-  requestedCategory: string;
-};
 export type ReportResponse = {
   message: string;
 };

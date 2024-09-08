@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import type { Trivia } from "../components/card";
+import { unstable_cache } from "next/cache";
 
 const errorTrivia = {
   question: "Something went wrong",
@@ -8,12 +8,26 @@ const errorTrivia = {
   category: "",
   requestedCategory: "",
 };
-
+export type Trivia = {
+  question: string;
+  answer: string;
+  category: string;
+  id: string;
+  requestedCategory: string;
+};
 const url: string = process.env.HOST_URL as string;
-export async function getTrivia(
+
+export const getTrivia = async (id?: string, category?: string) => {
+  if (id) {
+    return await fetchTriviaCached(headers(), id, category);
+  }
+  return await fetchTrivia(headers(), id, category);
+};
+const fetchTrivia = async (
+  headers: Headers,
   id?: string,
   category?: string
-): Promise<Trivia> {
+) => {
   // just pass id and category directly to trivia api
   const newSearchParams = new URLSearchParams();
   if (id) {
@@ -27,8 +41,8 @@ export async function getTrivia(
       newSearchParams.size > 0 ? `?${newSearchParams.toString()}` : ""
     }`,
     {
-      cache: "force-cache",
-      headers: headers(),
+      cache: "no-store",
+      headers: headers,
     }
   );
 
@@ -45,4 +59,5 @@ export async function getTrivia(
   const responseJson = await response.json();
   const trivia: Trivia = responseJson.message;
   return trivia;
-}
+};
+const fetchTriviaCached = unstable_cache(fetchTrivia);
