@@ -27,7 +27,7 @@ export async function getTrivia(
       newSearchParams.size > 0 ? `?${newSearchParams.toString()}` : ""
     }`,
     {
-      cache: "no-store",
+      cache: "force-cache",
       headers: headers(),
     }
   );

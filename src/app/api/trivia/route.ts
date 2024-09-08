@@ -44,4 +44,3 @@ export async function GET(request: NextRequest) {
     message: { ...trivia.rows[0], requestedCategory },
   });
 }
-export const revalidate = 0;
