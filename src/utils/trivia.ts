@@ -1,6 +1,14 @@
 import { headers } from "next/headers";
 import type { Trivia } from "../components/card";
 
+const errorTrivia = {
+  question: "Something went wrong",
+  answer: "",
+  id: "-1",
+  category: "",
+  requestedCategory: "",
+};
+
 const url: string = process.env.HOST_URL as string;
 export async function getTrivia(
   id?: string,
@@ -25,7 +33,14 @@ export async function getTrivia(
   );
 
   if (!response.ok) {
+    if (response.status == 429) {
+      return {
+        ...errorTrivia,
+        question: "Rate limited, please try again in a few seconds",
+      };
+    }
     console.error("Something went wrong fetching trivia");
+    return errorTrivia;
   }
   const responseJson = await response.json();
   const trivia: Trivia = responseJson.message;

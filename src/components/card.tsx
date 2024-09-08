@@ -15,10 +15,7 @@ export type Trivia = {
 export type ReportResponse = {
   message: string;
 };
-function revealAnswer(
-  e: React.MouseEvent<HTMLElement>,
-  answerRef: RefObject<HTMLElement>
-) {
+function revealAnswer(answerRef: RefObject<HTMLElement>) {
   const answerElement = answerRef.current;
   answerElement?.setAttribute("style", "filter: none");
 }
@@ -98,11 +95,7 @@ export function Card({ trivia }: { trivia: Trivia }) {
   }, [id, pathName, requestedCategory]);
 
   return (
-    <div
-      role="none"
-      className="card"
-      onClick={(e) => revealAnswer(e, answerRef)}
-    >
+    <div role="none" className="card" onClick={(e) => revealAnswer(answerRef)}>
       <div className="cardContents">
         <h3 className="category">{category}</h3>
         <h2>{question}</h2>
@@ -111,21 +104,23 @@ export function Card({ trivia }: { trivia: Trivia }) {
         </h2>
       </div>
       <div id="buttonHolder">
-        <button
-          aria-label="report"
-          type="button"
-          id="reportButton"
-          onClick={() =>
-            showReportDialogue(
-              reportDialogueRef,
-              reportButtonRef,
-              nextButtonRef
-            )
-          }
-          ref={reportButtonRef}
-        >
-          <img alt="show report dialogue" src="/flag.svg" />
-        </button>
+        {Number(id) > 0 ? (
+          <button
+            aria-label="report"
+            type="button"
+            id="reportButton"
+            onClick={() =>
+              showReportDialogue(
+                reportDialogueRef,
+                reportButtonRef,
+                nextButtonRef
+              )
+            }
+            ref={reportButtonRef}
+          >
+            <img alt="show report dialogue" src="/flag.svg" />
+          </button>
+        ) : null}
 
         <button
           aria-label="next"
