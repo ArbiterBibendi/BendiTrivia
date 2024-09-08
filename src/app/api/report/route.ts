@@ -24,6 +24,6 @@ export async function POST(nextRequest: NextRequest) {
   const sqlResponse =
     await sql`INSERT INTO reports (trivia_id, info) VALUES (${request.trivia_id}, ${trimmedReason})`;
   return NextResponse.json({
-    message: "Recieved",
+    message: "Received",
   });
 }
