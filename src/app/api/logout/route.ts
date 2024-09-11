@@ -1,4 +1,4 @@
-import { invalidateSessionAndSetBlankCookie } from "@/utils/auth";
+import { invalidateSessionAndSetBlankCookie } from "../../../utils/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export function GET(request: NextRequest) {

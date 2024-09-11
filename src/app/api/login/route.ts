@@ -3,11 +3,11 @@ import {
   createSessionAndSetCookie,
   validatePassword,
   validateUsername,
-} from "@/utils/auth";
+} from "../../../utils/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { verify } from "@node-rs/argon2";
-import type { dbUser } from "@/utils/auth";
+import type { dbUser } from "../../../utils/auth";
 
 export async function POST(nextRequest: NextRequest) {
   const formData = await nextRequest.formData();

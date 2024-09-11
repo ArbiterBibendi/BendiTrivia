@@ -4,7 +4,7 @@
 
 import { usePathname } from "next/navigation";
 import { RefObject, useEffect, useRef } from "react";
-import { Trivia } from "@/utils/trivia";
+import { Trivia } from "../utils/trivia";
 
 export type ReportResponse = {
   message: string;

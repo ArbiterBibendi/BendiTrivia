@@ -3,7 +3,7 @@ import {
   createSessionAndSetCookie,
   validatePassword,
   validateUsername,
-} from "@/utils/auth";
+} from "../../../utils/auth";
 import { hash } from "@node-rs/argon2";
 import { sql } from "@vercel/postgres";
 import { generateIdFromEntropySize } from "lucia";

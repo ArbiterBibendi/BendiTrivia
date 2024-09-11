@@ -1,4 +1,4 @@
-import { validateRequest } from "@/utils/auth";
+import { validateRequest } from "../../utils/auth";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
 

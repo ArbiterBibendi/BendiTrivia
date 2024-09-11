@@ -1,6 +1,6 @@
 import { Card } from "@/components/card";
-import { validateRequest } from "@/utils/auth";
-import { getTrivia } from "@/utils/trivia";
+import { validateRequest } from "../../utils/auth";
+import { getTrivia } from "../../utils/trivia";
 import { redirect } from "next/navigation";
 
 export default async function Home({

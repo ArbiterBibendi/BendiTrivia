@@ -1,4 +1,4 @@
-import { validateRequest } from "@/utils/auth";
+import { validateRequest } from "../../../utils/auth";
 import type { QueryResult } from "@vercel/postgres";
 import { sql } from "@vercel/postgres";
 import type { NextRequest } from "next/server";
