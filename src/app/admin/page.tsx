@@ -1,3 +1,5 @@
+import { validateRequest } from "@/utils/auth";
+import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
 type Report = {
@@ -14,6 +16,10 @@ async function getReports(): Promise<Report[]> {
   return [];
 }
 export default async function Page() {
+  const { user } = await validateRequest();
+  if (!user || user.role != "admin") {
+    redirect("/");
+  }
   const reports = await getReports();
   console.log(reports);
   return (
