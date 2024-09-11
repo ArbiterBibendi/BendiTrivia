@@ -1,4 +1,4 @@
-import Nav from "@/components/NavBar";
+import Nav from "../components/NavBar";
 import "./style.css";
 
 import type { Metadata } from "next";

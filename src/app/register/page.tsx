@@ -1,6 +1,6 @@
 "use client";
 
-import { FormHint } from "@/components/formHint";
+import { FormHint } from "../../components/formHint";
 import { FormEvent, RefObject, SetStateAction, useRef, useState } from "react";
 
 type ServerMessage = {
