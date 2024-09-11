@@ -42,7 +42,7 @@ const fetchTrivia = async (
     }`,
     {
       cache: "no-store",
-      headers: headers,
+      headers: new Headers(headers),
     }
   );
 
