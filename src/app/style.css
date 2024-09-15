@@ -101,12 +101,17 @@ nav {
   margin-top: 3em;
   filter: blur(10px);
 }
+#clickHint {
+  color: grey;
+  text-align: center;
+  margin-top: auto;
+}
 .category {
   color: rgba(90, 90, 90, 0.438);
 }
 #buttonHolder {
   margin-top: auto;
-  display: flex;
+  display: none; /* will be set to flex in js */
 }
 #nextButton {
   margin-top: auto;
@@ -123,6 +128,11 @@ nav {
 button:hover {
   filter: brightness(0.75);
   border: 1px solid cyan;
+}
+button {
+  label {
+    font-weight: bold;
+  }
 }
 #reportDialogue {
   display: none;

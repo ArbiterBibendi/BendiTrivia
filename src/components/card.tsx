@@ -9,9 +9,19 @@ import { Trivia } from "../utils/trivia";
 export type ReportResponse = {
   message: string;
 };
-function revealAnswer(answerRef: RefObject<HTMLElement>) {
+function revealAnswer(
+  answerRef: RefObject<HTMLElement>,
+  buttonHolderRef: RefObject<HTMLElement>,
+  clickHintRef: RefObject<HTMLElement>
+) {
   const answerElement = answerRef.current;
   answerElement?.setAttribute("style", "filter: none");
+
+  const buttonHolder = buttonHolderRef.current;
+  buttonHolder?.setAttribute("style", "display: flex");
+
+  const clickHint = clickHintRef.current;
+  clickHint?.setAttribute("style", "display: none");
 }
 function getNewTrivia(category: string, pathName: string) {
   window.location.href = `${pathName}?category=${category}`;
@@ -77,6 +87,8 @@ export function Card({ trivia }: { trivia: Trivia }) {
   const reportButtonRef = useRef(null);
   const nextButtonRef = useRef(null);
   const reportReasonRef = useRef(null);
+  const buttonHolderRef = useRef(null);
+  const clickHintRef = useRef(null);
   const pathName = usePathname();
 
   useEffect(() => {
@@ -89,7 +101,11 @@ export function Card({ trivia }: { trivia: Trivia }) {
   }, [id, pathName, requestedCategory]);
 
   return (
-    <div role="none" className="card" onClick={(e) => revealAnswer(answerRef)}>
+    <div
+      role="none"
+      className="card"
+      onClick={(e) => revealAnswer(answerRef, buttonHolderRef, clickHintRef)}
+    >
       <div className="cardContents">
         <h3 className="category">{category}</h3>
         <h2>{question}</h2>
@@ -97,7 +113,7 @@ export function Card({ trivia }: { trivia: Trivia }) {
           {answer}
         </h2>
       </div>
-      <div id="buttonHolder">
+      <div id="buttonHolder" ref={buttonHolderRef}>
         {Number(id) > 0 ? (
           <button
             aria-label="report"
@@ -112,6 +128,7 @@ export function Card({ trivia }: { trivia: Trivia }) {
             }
             ref={reportButtonRef}
           >
+            <label>Report</label>
             <img alt="show report dialogue" src="/flag.svg" />
           </button>
         ) : null}
@@ -123,9 +140,13 @@ export function Card({ trivia }: { trivia: Trivia }) {
           onClick={() => getNewTrivia(requestedCategory, pathName)}
           ref={nextButtonRef}
         >
+          <label>Next</label>
           <img alt="next card" src="/next.svg" />
         </button>
       </div>
+      <p id="clickHint" ref={clickHintRef}>
+        Click to reveal answer
+      </p>
       <div id="reportDialogue" ref={reportDialogueRef}>
         <textarea
           id="reportReason"
@@ -134,7 +155,7 @@ export function Card({ trivia }: { trivia: Trivia }) {
         />
         <div id="reportDialogueButtonHolder">
           <button
-            aria-label="show report dialogue"
+            aria-label="send report"
             type="button"
             onClick={() =>
               reportCard(
