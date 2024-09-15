@@ -2,8 +2,9 @@ import { headers } from "next/headers";
 import { validateRequest } from "../../utils/auth";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
+import ReportTable from "@/components/ReportTable";
 
-type Report = {
+export type Report = {
   id: string;
   trivia_id: string;
   question: string;
@@ -21,35 +22,12 @@ async function getReports(): Promise<Report[]> {
   }
   return [];
 }
+
 export default async function Page() {
   const { user } = await validateRequest();
   if (!user || user.role != "admin") {
     redirect("/");
   }
   const reports = await getReports();
-  console.log(reports);
-  return (
-    <table id="reportsTable">
-      <tbody>
-        <tr>
-          <th>id</th>
-          <th>trivia_id</th>
-          <th>question</th>
-          <th>answer</th>
-          <th>info</th>
-        </tr>
-        {reports.map((report) => {
-          return (
-            <tr>
-              <td>{report.id}</td>
-              <td>{report.trivia_id}</td>
-              <td>{report.question}</td>
-              <td>{report.answer}</td>
-              <td>{report.info}</td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
-  );
+  return <ReportTable reports={reports} />;
 }

@@ -44,3 +44,13 @@ export async function GET(request: NextRequest) {
     message: { ...trivia.rows[0], requestedCategory },
   });
 }
+
+export async function PUT(nextRequest: NextRequest) {
+  const { user } = await validateRequest();
+  if (!user || user.role != "admin") {
+    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
+  }
+  const requestBody = await nextRequest.json();
+  console.log(requestBody);
+  return NextResponse.json({ message: "ok" });
+}
