@@ -29,8 +29,15 @@ export default async function Page() {
   const reports = await getReports();
   console.log(reports);
   return (
-    <table>
+    <table id="reportsTable">
       <tbody>
+        <tr>
+          <th>id</th>
+          <th>trivia_id</th>
+          <th>question</th>
+          <th>answer</th>
+          <th>info</th>
+        </tr>
         {reports.map((report) => {
           return (
             <tr>

@@ -213,3 +213,14 @@ form {
     color: white;
   }
 }
+#reportsTable {
+  border: 1px solid white;
+  border-collapse: collapse;
+  th {
+    text-align: left;
+    border: 1px solid white;
+  }
+  td {
+    border: 1px solid white;
+  }
+}
