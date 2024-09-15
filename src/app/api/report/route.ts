@@ -28,16 +28,12 @@ export async function POST(nextRequest: NextRequest) {
   });
 }
 export async function GET(nextRequest: NextRequest) {
-  return NextResponse.json([
-    { id: "1", trivia_id: "1", info: "monday" },
-    { id: "2", trivia_id: "2", info: "tuesday" },
-    { id: "3", trivia_id: "3", info: "wednesday" },
-    { id: "4", trivia_id: "4", info: "thursday" },
-    { id: "5", trivia_id: "5", info: "friday" },
-    { id: "6", trivia_id: "6", info: "saturday" },
-    { id: "7", trivia_id: "7", info: "sunday" },
-    { id: "8", trivia_id: "8", info: "monday" },
-    { id: "9", trivia_id: "9", info: "tuesday" },
-    { id: "0", trivia_id: "0", info: "wednesday" },
-  ]);
+  const { user } = await validateRequest();
+  if (!user || user.role != "admin") {
+    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
+  }
+  const page = nextRequest.nextUrl.searchParams.get("p") || Number(0);
+  const sqlResponse =
+    await sql`SELECT reports.id, trivia_id, question, answer, info FROM reports LEFT JOIN trivia ON trivia.id = reports.trivia_id LIMIT 5 OFFSET ${page}`;
+  return NextResponse.json(sqlResponse.rows);
 }
