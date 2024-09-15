@@ -61,7 +61,7 @@ function onFocus(
   ) {
     if (usernameRef.current?.value.length < 3) {
       setUsernameHint(" * Must be at least 3 characters");
-    } else if (!/^[a-z0-9_-]+$/.test(usernameRef.current?.value)) {
+    } else if (!/^[a-zA-Z0-9_-]+$/.test(usernameRef.current?.value)) {
       setUsernameHint(
         " * Must not contain any special characters other than _ and -"
       );
