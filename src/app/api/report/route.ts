@@ -38,3 +38,24 @@ export async function GET(nextRequest: NextRequest) {
     await sql`SELECT reports.id, trivia_id, question, answer, info FROM reports LEFT JOIN trivia ON trivia.id = reports.trivia_id LIMIT ${limit} OFFSET ${page * limit}`;
   return NextResponse.json(sqlResponse.rows);
 }
+
+export async function DELETE(nextRequest: NextRequest) {
+  const { user } = await validateRequest();
+  if (!user || user.role != "admin") {
+    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
+  }
+  try {
+    const request = await nextRequest.json();
+    if (!request) {
+      return;
+    }
+    const reportId = Number(request);
+    await sql`DELETE FROM reports WHERE id=${reportId}`;
+    return NextResponse.json({ message: "ok" });
+  } catch {
+    return NextResponse.json(
+      { error: "could not update database" },
+      { status: 500 }
+    );
+  }
+}

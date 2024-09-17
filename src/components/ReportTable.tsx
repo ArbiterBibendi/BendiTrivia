@@ -29,6 +29,20 @@ async function updateTrivia(
       message.message || message.error || "";
   }
 }
+async function deleteReport(report: Report) {
+  if (!report.id) {
+    return;
+  }
+  const response = await fetch(`/api/report`, {
+    method: "DELETE",
+    cache: "no-store",
+    body: report.id,
+  });
+  const message: ServerMessage = await response.json();
+  if (message.message == "ok") {
+    location.reload();
+  }
+}
 function onQuestionInputChange(
   e: ChangeEvent<HTMLTextAreaElement>,
   reportsRef: RefObject<Report[]>,
@@ -101,7 +115,9 @@ export default function ReportTable({ reports }: { reports: Report[] }) {
                   >
                     Update Trivia
                   </button>
-                  <button>Close Report</button>
+                  <button onClick={() => deleteReport(report)}>
+                    Close Report
+                  </button>
                 </td>
               </tr>
             );
