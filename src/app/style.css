@@ -7,6 +7,7 @@ html {
   justify-content: center;
 }
 body {
+  max-width: 100%;
   color: bisque;
 }
 h1 {
@@ -216,6 +217,9 @@ form {
 #reportsTable {
   border: 1px solid white;
   border-collapse: collapse;
+  textarea {
+    resize: none;
+  }
   th {
     text-align: left;
     border: 1px solid white;
@@ -223,4 +227,10 @@ form {
   td {
     border: 1px solid white;
   }
+  div {
+    overflow-wrap: break-word;
+  }
+}
+#reportsTableContainer {
+  overflow-x: auto;
 }

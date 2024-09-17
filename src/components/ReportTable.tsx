@@ -30,7 +30,7 @@ async function updateTrivia(
   }
 }
 function onQuestionInputChange(
-  e: ChangeEvent<HTMLInputElement>,
+  e: ChangeEvent<HTMLTextAreaElement>,
   reportsRef: RefObject<Report[]>,
   i: number
 ) {
@@ -41,7 +41,7 @@ function onQuestionInputChange(
   console.log(reportsRef.current[i]);
 }
 function onAnswerInputChange(
-  e: ChangeEvent<HTMLInputElement>,
+  e: ChangeEvent<HTMLTextAreaElement>,
   reportsRef: RefObject<Report[]>,
   i: number
 ) {
@@ -55,53 +55,59 @@ export default function ReportTable({ reports }: { reports: Report[] }) {
   const reportsRef: RefObject<Report[]> = useRef([]);
   const serverMessageRef: RefObject<HTMLDivElement> = useRef(null);
   return (
-    <table id="reportsTable">
-      <tbody>
-        <tr>
-          <th>id</th>
-          <th>trivia_id</th>
-          <th>question</th>
-          <th>answer</th>
-          <th>info</th>
-          <th>
-            <div className="serverMessage" ref={serverMessageRef}></div>
-          </th>
-        </tr>
-        {reports.map((report, i) => {
-          if (reportsRef.current) {
-            reportsRef.current[i] = report;
-          }
-          return (
-            <tr key={uuidv4()}>
-              <td>{report.id}</td>
-              <td>{report.trivia_id}</td>
-              <td>
-                <input
-                  type="text"
-                  defaultValue={report.question}
-                  onChange={(e) => onQuestionInputChange(e, reportsRef, i)}
-                ></input>
-              </td>
-              <td>
-                <input
-                  type="text"
-                  defaultValue={report.answer}
-                  onChange={(e) => onAnswerInputChange(e, reportsRef, i)}
-                ></input>
-              </td>
-              <td>{report.info}</td>
-              <td>
-                <button
-                  onClick={() => updateTrivia(reportsRef, i, serverMessageRef)}
-                >
-                  Update Trivia
-                </button>
-                <button>Close Report</button>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+    <div id="reportsTableContainer">
+      <table id="reportsTable">
+        <tbody>
+          <tr>
+            <th>id</th>
+            <th>trivia_id</th>
+            <th>question</th>
+            <th>answer</th>
+            <th>info</th>
+            <th>
+              <div className="serverMessage" ref={serverMessageRef}></div>
+            </th>
+          </tr>
+          {reports.map((report, i) => {
+            if (reportsRef.current) {
+              reportsRef.current[i] = report;
+            }
+            return (
+              <tr key={uuidv4()}>
+                <td>{report.id}</td>
+                <td>{report.trivia_id}</td>
+                <td>
+                  <textarea
+                    spellCheck="false"
+                    defaultValue={report.question}
+                    onChange={(e) => onQuestionInputChange(e, reportsRef, i)}
+                  ></textarea>
+                </td>
+                <td>
+                  <textarea
+                    spellCheck="false"
+                    defaultValue={report.answer}
+                    onChange={(e) => onAnswerInputChange(e, reportsRef, i)}
+                  ></textarea>
+                </td>
+                <td>
+                  <div>{report.info}</div>
+                </td>
+                <td>
+                  <button
+                    onClick={() =>
+                      updateTrivia(reportsRef, i, serverMessageRef)
+                    }
+                  >
+                    Update Trivia
+                  </button>
+                  <button>Close Report</button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 }
