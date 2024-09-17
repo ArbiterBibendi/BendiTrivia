@@ -1,14 +1,59 @@
 "use client";
 import { Report } from "@/app/admin/page";
-async function updateTrivia(report: Report) {
+import { ChangeEvent, RefObject, useRef } from "react";
+import { v4 as uuidv4 } from "uuid";
+type ServerMessage = {
+  error?: string;
+  message?: string;
+};
+async function updateTrivia(
+  reportsRef: RefObject<Report[]>,
+  i: number,
+  serverMessageRef: RefObject<HTMLDivElement>
+) {
+  if (!reportsRef.current) {
+    return;
+  }
+  if (serverMessageRef.current) {
+    serverMessageRef.current.textContent = "";
+  }
+  const report = reportsRef.current[i];
   const response = await fetch(`/api/trivia`, {
     cache: "no-store",
     method: "PUT",
     body: JSON.stringify(report),
   });
-  console.log(report);
+  const message: ServerMessage = await response.json();
+  if (serverMessageRef.current) {
+    serverMessageRef.current.textContent =
+      message.message || message.error || "";
+  }
+}
+function onQuestionInputChange(
+  e: ChangeEvent<HTMLInputElement>,
+  reportsRef: RefObject<Report[]>,
+  i: number
+) {
+  if (!reportsRef.current) {
+    return;
+  }
+  reportsRef.current[i].question = e.target.value;
+  console.log(reportsRef.current[i]);
+}
+function onAnswerInputChange(
+  e: ChangeEvent<HTMLInputElement>,
+  reportsRef: RefObject<Report[]>,
+  i: number
+) {
+  if (!reportsRef.current) {
+    return;
+  }
+  reportsRef.current[i].answer = e.target.value;
+  console.log(reportsRef.current[i]);
 }
 export default function ReportTable({ reports }: { reports: Report[] }) {
+  const reportsRef: RefObject<Report[]> = useRef([]);
+  const serverMessageRef: RefObject<HTMLDivElement> = useRef(null);
   return (
     <table id="reportsTable">
       <tbody>
@@ -18,23 +63,42 @@ export default function ReportTable({ reports }: { reports: Report[] }) {
           <th>question</th>
           <th>answer</th>
           <th>info</th>
-          <div className="serverMessage"></div>
+          <th>
+            <div className="serverMessage" ref={serverMessageRef}></div>
+          </th>
         </tr>
-        {reports.map((report) => {
+        {reports.map((report, i) => {
+          if (reportsRef.current) {
+            reportsRef.current[i] = report;
+          }
           return (
-            <>
-              <tr>
-                <td>{report.id}</td>
-                <td>{report.trivia_id}</td>
-                <td>{report.question}</td>
-                <td>{report.answer}</td>
-                <td>{report.info}</td>
-                <button onClick={() => updateTrivia(report)}>
+            <tr key={uuidv4()}>
+              <td>{report.id}</td>
+              <td>{report.trivia_id}</td>
+              <td>
+                <input
+                  type="text"
+                  defaultValue={report.question}
+                  onChange={(e) => onQuestionInputChange(e, reportsRef, i)}
+                ></input>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  defaultValue={report.answer}
+                  onChange={(e) => onAnswerInputChange(e, reportsRef, i)}
+                ></input>
+              </td>
+              <td>{report.info}</td>
+              <td>
+                <button
+                  onClick={() => updateTrivia(reportsRef, i, serverMessageRef)}
+                >
                   Update Trivia
                 </button>
                 <button>Close Report</button>
-              </tr>
-            </>
+              </td>
+            </tr>
           );
         })}
       </tbody>

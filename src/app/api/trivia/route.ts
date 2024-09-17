@@ -52,5 +52,16 @@ export async function PUT(nextRequest: NextRequest) {
   }
   const requestBody = await nextRequest.json();
   console.log(requestBody);
+  try {
+    if (requestBody.trivia_id && requestBody.question && requestBody.answer) {
+      await sql`UPDATE trivia SET question=${requestBody.question}, answer=${requestBody.answer} WHERE id=${requestBody.trivia_id}`;
+    }
+  } catch {
+    return NextResponse.json(
+      { error: "error updating database" },
+      { status: 500 }
+    );
+  }
+
   return NextResponse.json({ message: "ok" });
 }

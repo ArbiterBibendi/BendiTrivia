@@ -12,8 +12,8 @@ export type Report = {
   info: string;
 };
 const url: string = process.env.HOST_URL as string;
-async function getReports(): Promise<Report[]> {
-  const response = await fetch(`${url}/api/report`, {
+async function getReports(page: number): Promise<Report[]> {
+  const response = await fetch(`${url}/api/report?p=${page}`, {
     cache: "no-store",
     headers: new Headers(headers()),
   });
@@ -23,11 +23,16 @@ async function getReports(): Promise<Report[]> {
   return [];
 }
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: { p: string };
+}) {
   const { user } = await validateRequest();
   if (!user || user.role != "admin") {
     redirect("/");
   }
-  const reports = await getReports();
+  const page = Number(searchParams.p) || Number(0);
+  const reports = await getReports(page);
   return <ReportTable reports={reports} />;
 }

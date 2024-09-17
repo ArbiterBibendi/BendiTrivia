@@ -32,8 +32,9 @@ export async function GET(nextRequest: NextRequest) {
   if (!user || user.role != "admin") {
     return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
   }
-  const page = nextRequest.nextUrl.searchParams.get("p") || Number(0);
+  const page = Number(nextRequest.nextUrl.searchParams.get("p")) || Number(0);
+  const limit = Number(nextRequest.nextUrl.searchParams.get("limit")) || 10;
   const sqlResponse =
-    await sql`SELECT reports.id, trivia_id, question, answer, info FROM reports LEFT JOIN trivia ON trivia.id = reports.trivia_id LIMIT 5 OFFSET ${page}`;
+    await sql`SELECT reports.id, trivia_id, question, answer, info FROM reports LEFT JOIN trivia ON trivia.id = reports.trivia_id LIMIT ${limit} OFFSET ${page * limit}`;
   return NextResponse.json(sqlResponse.rows);
 }
