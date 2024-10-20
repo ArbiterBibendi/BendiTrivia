@@ -9,6 +9,7 @@ export type Report = {
   trivia_id: string;
   question: string;
   answer: string;
+  category: string;
   info: string;
 };
 const url: string = process.env.HOST_URL as string;

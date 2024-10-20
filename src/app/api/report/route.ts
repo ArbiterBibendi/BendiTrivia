@@ -35,7 +35,7 @@ export async function GET(nextRequest: NextRequest) {
   const page = Number(nextRequest.nextUrl.searchParams.get("p")) || Number(0);
   const limit = Number(nextRequest.nextUrl.searchParams.get("limit")) || 10;
   const sqlResponse =
-    await sql`SELECT reports.id, trivia_id, question, answer, info FROM reports LEFT JOIN trivia ON trivia.id = reports.trivia_id LIMIT ${limit} OFFSET ${page * limit}`;
+    await sql`SELECT reports.id, trivia_id, question, answer, category, info FROM reports LEFT JOIN trivia ON trivia.id = reports.trivia_id LIMIT ${limit} OFFSET ${page * limit}`;
   return NextResponse.json(sqlResponse.rows);
 }
 

@@ -2,6 +2,7 @@
 import { Report } from "@/app/admin/page";
 import { ChangeEvent, RefObject, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
+import categories from "@/utils/categories";
 type ServerMessage = {
   error?: string;
   message?: string;
@@ -52,7 +53,6 @@ function onQuestionInputChange(
     return;
   }
   reportsRef.current[i].question = e.target.value;
-  console.log(reportsRef.current[i]);
 }
 function onAnswerInputChange(
   e: ChangeEvent<HTMLTextAreaElement>,
@@ -63,7 +63,17 @@ function onAnswerInputChange(
     return;
   }
   reportsRef.current[i].answer = e.target.value;
-  console.log(reportsRef.current[i]);
+}
+function onCategoryInputChange(
+  e: ChangeEvent<HTMLSelectElement>,
+  reportsRef: RefObject<Report[]>,
+  i: number
+) {
+  if (!reportsRef.current) {
+    return;
+  }
+  console.log(reportsRef.current);
+  reportsRef.current[i].category = e.target.value;
 }
 export default function ReportTable({ reports }: { reports: Report[] }) {
   const reportsRef: RefObject<Report[]> = useRef([]);
@@ -77,6 +87,7 @@ export default function ReportTable({ reports }: { reports: Report[] }) {
             <th>trivia_id</th>
             <th>question</th>
             <th>answer</th>
+            <th>category</th>
             <th>info</th>
             <th>
               <div className="serverMessage" ref={serverMessageRef}></div>
@@ -103,6 +114,20 @@ export default function ReportTable({ reports }: { reports: Report[] }) {
                     defaultValue={report.answer}
                     onChange={(e) => onAnswerInputChange(e, reportsRef, i)}
                   ></textarea>
+                </td>
+                <td>
+                  <select
+                    defaultValue={report.category}
+                    onChange={(e) => onCategoryInputChange(e, reportsRef, i)}
+                  >
+                    {categories.map((category: string) => {
+                      return (
+                        <option key={uuidv4()} value={category}>
+                          {category}
+                        </option>
+                      );
+                    })}
+                  </select>
                 </td>
                 <td>
                   <div>{report.info}</div>
