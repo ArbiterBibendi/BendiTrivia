@@ -1,9 +1,9 @@
-import Link from "next/link";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { redirect } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 
-import categories from "../utils/categories";
-import { redirect } from "next/navigation";
 import { validateRequest } from "../utils/auth";
+import categories from "../utils/categories";
 
 export default async function Home() {
   const { user } = await validateRequest();
@@ -13,6 +13,7 @@ export default async function Home() {
 
   return (
     <>
+      <SpeedInsights />
       <h1 id="selectacategory">Select a category</h1>
       <div id="homepageCategoryHolder">
         {categories.map((value: string) => {
